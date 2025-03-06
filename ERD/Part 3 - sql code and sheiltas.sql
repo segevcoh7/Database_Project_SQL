@@ -393,7 +393,7 @@ ORDER BY
 
 
 -- Task 1 - With - Q7
--- business logic – the goal of this query is to find the top 5 customers with the highest insurance price.
+-- business logic Β– the goal of this query is to find the top 5 customers with the highest insurance price.
 WITH 
 TripDays AS (
     SELECT 
@@ -963,30 +963,30 @@ CREATE PROCEDURE dbo.sp_InsertValidatedOrder
 AS
 BEGIN
     BEGIN TRY
-        -- αγιχεϊ μεβιεϊ περτεϊ
+        -- Γ΅Γ£Γ©Γ·Γ¥ΓΊ Γ¬Γ¥ΓΆΓ©Γ¥ΓΊ Γ°Γ¥Γ±Γ΄Γ¥ΓΊ
         IF @DepDate > @ArrivDate
             THROW 50001, 'Departure date cannot be later than arrival date.', 1;
 		
         IF LEN(@CreditCardNumber) <> 16 OR ISNUMERIC(@CreditCardNumber) = 0
             THROW 50002, 'Invalid credit card number format.', 1;
 
-        -- δερτϊ πϊεπιν μθαμΰεϊ
+        -- Γ¤Γ¥Γ±Γ΄ΓΊ Γ°ΓΊΓ¥Γ°Γ©Γ­ Γ¬Γ¨Γ΅Γ¬Γ Γ¥ΓΊ
         INSERT INTO Orders (Order_ID, Order_Date, Dep_Date, Arriv_Date, Credit_Card_Number, Payments)
         VALUES (@OrderID, GETDATE(), @DepDate, @ArrivDate, @CreditCardNumber, @Payments);
 
         PRINT 'Order inserted successfully.';
     END TRY
     BEGIN CATCH
-        -- θιτεμ αωβιΰδ
+        -- Γ¨Γ©Γ΄Γ¥Γ¬ Γ΅ΓΉΓΆΓ©Γ Γ¤
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
         DECLARE @ErrorState INT = ERROR_STATE();
 
-        -- ωξιψϊ δωβιΰδ αθαμϊ μεβιν
+        -- ΓΉΓ®Γ©ΓΈΓΊ Γ¤ΓΉΓΆΓ©Γ Γ¤ Γ΅Γ¨Γ΅Γ¬ΓΊ Γ¬Γ¥ΓΆΓ©Γ­
         INSERT INTO ErrorLogs (ErrorMessage, ErrorSeverity, ErrorState, LogDate)
         VALUES (@ErrorMessage, @ErrorSeverity, @ErrorState, GETDATE());
 
-        -- δφβϊ δεγςδ
+        -- Γ¤Γ¶ΓΆΓΊ Γ¤Γ¥Γ£Γ²Γ¤
         PRINT 'Error occurred: ' + @ErrorMessage;
     END CATCH;
 END;
